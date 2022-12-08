@@ -1,31 +1,75 @@
 Ansible Role: iam
 =========
 
-A brief description of the role goes here.
+A role to manage basic user configuration for my homelab.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+The `passlib` library must be installed on the controller to hash clear text passwords.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+regular_user_name:  # Mandatory
+```
+The username of the regular user.
+```yaml
+regular_user_password:  # Mandatory
+password_salt:  # Mandatory
+```
+The clear text password of the regular user. The password is hashed with `passlib`: `password_hash('sha512', password_salt)`. To keep the hash consistent a salt must be provided.
+```yaml
+regular_user_shell: /bin/bash
+```
+The shell of the regular user.
+
+```yaml
+regular_user_import_authorized_keys: true
+regular_user_github_username:  # Omit
+```
+Whether to import the regular user public ssh keys from github or not.An additional variable is provided in case the github username is different from the OS one.
+```yaml
+automation_user_name:  # Mandatory
+automation_user_home:  # Omit
+```
+The username of the automation user. The path of the automation user home can be provided but is not mandatory. The role will try to move the home if needed.
+```yaml
+automation_user_authorized_keys: []
+```
+The list of the public ssh keys to add to the automation user `authorized_keys`.
+
+```yaml
+sudoers_remove: []
+```
+List of the boostrap files to remove from the `/etc/sudoers.d` directory.
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+The role use the `ansible.posix.authorized_keys` from the `ansible.posix` collection.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+- name: Converge
+  hosts: all
+  vars:
+    automation_user_name: ansible
+    regular_user_github_username: alecunsolo
+    regular_user_name: testuser
+    regular_user_password: password
+    password_salt: zFNLFngTazUv
+    automation_user_home: /var/lib/{{ automation_user_name }}
+    automation_user_authorized_keys:
+      - "{{ lookup('file', 'test_data/id_e25519_test.pub') }}"
+  tasks:
+    - name: Include iam.
+      ansible.builtin.include_role:
+        name: alecunsolo.iam
+```
 
 License
 -------
