@@ -48,6 +48,12 @@
     mode: '0440'
     validate: visudo -c -f %s
 
+- name: Remove inital sudoers files.
+  ansible.builtin.file:
+    name: /etc/sudoers.d/{{ item }}
+    state: absent
+  loop: '{{ sudoers_remove }}'
+
 - name: Disable root password.
   ansible.builtin.user:
     name: root
