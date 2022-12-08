@@ -1,6 +1,15 @@
 ---
 - name: Converge
   hosts: all
+  vars:
+    automation_user_name: ansible
+    regular_user_github_username: alecunsolo
+    regular_user_name: testuser
+    regular_user_password: password
+    password_salt: zFNLFngTazUv
+    automation_user_home: /var/lib/{{ automation_user_name }}
+    automation_user_authorized_keys:
+      - "{{ lookup('file', 'test_data/id_e25519_test.pub') }}"
   tasks:
     - name: Include iam.
       ansible.builtin.include_role:

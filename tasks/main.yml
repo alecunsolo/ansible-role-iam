@@ -1,2 +1,55 @@
 ---
-# tasks file for iam
+- name: Ensure 'sudo' package is installed.
+  ansible.builtin.package:
+    name: sudo
+    state: present
+
+- name: Create regular user.
+  ansible.builtin.user:
+    name: '{{ regular_user_name }}'
+    password: "{{ regular_user_password | password_hash('sha512', password_salt) }}"
+    shell: "{{ regular_user_shell }}"
+    generate_ssh_key: true
+    ssh_key_type: ed25519
+    state: present
+
+- name: Manage regular user authorized_key via github.
+  ansible.posix.authorized_key:
+    user: '{{ regular_user_name }}'
+    key: https://github.com/{{ regular_user_github_username | default(regular_user_name) }}.keys
+    state: present
+    exclusive: true
+  when: regular_user_import_authorized_keys
+
+- name: Create automation user.
+  ansible.builtin.user:
+    name: '{{ automation_user_name }}'
+    home: '{{ automation_user_home | default(omit) }}'
+    move_home: true
+    password_lock: true
+    generate_ssh_key: true
+    ssh_key_type: ed25519
+    state: present
+
+- name: Manage automation user authorized_key.
+  ansible.posix.authorized_key:
+    user: '{{ automation_user_name }}'
+    key: '{{ item }}'
+    state: present
+    exclusive: true
+  loop: '{{ automation_user_authorized_keys }}'
+
+- name: Configure sudo access.
+  ansible.builtin.template:
+    src: sudoers.j2
+    dest: /etc/sudoers.d/99_ansible
+    owner: root
+    group: root
+    mode: '0440'
+    validate: visudo -c -f %s
+
+- name: Disable root password.
+  ansible.builtin.user:
+    name: root
+    password_lock: true
+  when: disable_root_password
