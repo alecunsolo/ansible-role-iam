@@ -1,5 +1,4 @@
 ---
-disable_root_password: true
 regular_user_import_authorized_keys: true
 regular_user_shell: /bin/bash
 automation_user_authorized_keys: []
