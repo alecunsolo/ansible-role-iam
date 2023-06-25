@@ -4,7 +4,8 @@
     name: sudo
     state: present
 
-- name: Create regular user.
+# For some reasons on MacOS the lint fails even with passlib installed
+- name: Create regular user.  # noqa: jinja[invalid]
   ansible.builtin.user:
     name: '{{ regular_user_name }}'
     password: "{{ regular_user_password | password_hash('sha512', password_salt) }}"
@@ -53,9 +54,3 @@
     name: /etc/sudoers.d/{{ item }}
     state: absent
   loop: '{{ sudoers_remove }}'
-
-- name: Disable root password.
-  ansible.builtin.user:
-    name: root
-    password_lock: true
-  when: disable_root_password
