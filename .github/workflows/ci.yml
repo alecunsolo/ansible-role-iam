@@ -39,7 +39,7 @@ jobs:
         with:
           python-version: 3.x
       - name: Install dependencies.
-        run: pip install molecule-plugins[podman]
+        run: pip install passlib molecule-plugins[podman]
       - name: Run molecule test.
         run: molecule test
         env:
