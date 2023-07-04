@@ -3,7 +3,10 @@
 
 Ansible Role: iam
 =========
+## DISCLAIMER
+After [this](https://www.redhat.com/en/blog/furthering-evolution-centos-stream) announcement I will not test on RHEL anymore.
 
+---------
 A role to manage basic user configuration for my homelab.
 
 Requirements
