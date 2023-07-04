@@ -2,7 +2,7 @@
 galaxy_info:
   author: Alessandro Cunsolo
   namespace: alecunsolo
-  description: your role description
+  description: Basic IAM management
   license: MIT
   role_name: iam
 
@@ -13,9 +13,6 @@ galaxy_info:
     versions:
     - all
   - name: Debian
-    versions:
-    - all
-  - name: EL
     versions:
     - all
 
