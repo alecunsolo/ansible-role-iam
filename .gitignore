@@ -1,5 +1,12 @@
-# Created by https://www.toptal.com/developers/gitignore/api/vim,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=vim,macos
+# Created by https://www.toptal.com/developers/gitignore/api/macos,vim,direnv,visualstudiocode,ansible
+# Edit at https://www.toptal.com/developers/gitignore?templates=macos,vim,direnv,visualstudiocode,ansible
+
+### Ansible ###
+*.retry
+
+### direnv ###
+.direnv
+.envrc
 
 ### macOS ###
 # General
@@ -8,7 +15,8 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -54,5 +62,19 @@ tags
 # Persistent undo
 [._]*.un~
 
-# End of https://www.toptal.com/developers/gitignore/api/vim,macos
+### VisualStudioCode ###
+.vscode/*
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+# End of https://www.toptal.com/developers/gitignore/api/macos,vim,direnv,visualstudiocode,ansible
 
